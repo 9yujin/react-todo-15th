@@ -1,7 +1,16 @@
+import { useContext } from 'react';
+import { TodoContext } from '../context/todoProvider';
 import TodoItem from './TodoItem';
 import { List } from '../styles/Container';
-const TodoItemList = ({ done, list, toggle, remove }) => {
+
+interface ITodoItemListProps {
+    done: Boolean;
+}
+
+const TodoItemList = ({ done }: ITodoItemListProps) => {
+    const { list } = useContext(TodoContext);
     const sectionList = list.filter((item) => item.done === done);
+
     return (
         <>
             <h4>
@@ -9,7 +18,7 @@ const TodoItemList = ({ done, list, toggle, remove }) => {
             </h4>
             <List>
                 {sectionList.map((item) => (
-                    <TodoItem done={done} item={item} key={item.id} toggle={() => toggle(item.id)} remove={() => remove(item.id)} />
+                    <TodoItem item={item} key={item.id} />
                 ))}
             </List>
         </>

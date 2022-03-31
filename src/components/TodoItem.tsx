@@ -1,14 +1,33 @@
+// https://blog.devgenius.io/using-styled-components-and-props-with-typescript-react-a3c32a496f47
+
 import styled from 'styled-components';
 import { ReactComponent as Remove } from '../assets/remove.svg';
+import useTodoContext from '../hooks/useTodoContext';
+import { ITodoItem } from '../Interface';
 
-const TodoItem = ({ done, item, toggle, remove }) => {
+interface ITodoItemProps {
+    item: ITodoItem;
+}
+
+interface IBtn {
+    done: boolean;
+}
+
+const TodoItem = ({ item }: ITodoItemProps) => {
+    const { id, content, done } = item;
+    const { deleteItem, toggleItem } = useTodoContext();
+
     return (
         <Item>
-            <ItemContentBox onClick={toggle}>
+            <ItemContentBox
+                onClick={() => {
+                    toggleItem(id);
+                }}
+            >
                 <RadioButton done={done}></RadioButton>
-                <ItemContent>{item.content}</ItemContent>
+                <ItemContent>{content}</ItemContent>
             </ItemContentBox>
-            <StyledRemove onClick={remove} />
+            <StyledRemove onClick={() => deleteItem(id)} />
         </Item>
     );
 };
@@ -26,14 +45,18 @@ const ItemContentBox = styled.div`
     display: flex;
 `;
 
-const RadioButton = styled.div`
+const RadioButton = styled.div<IBtn>`
     width: 16px;
     height: 16px;
     margin-right: 10px;
     border-radius: 50%;
     border: 2px solid #8989bb;
     cursor: pointer;
-    background-color: ${(props) => (props.done ? '#8989bb' : 'none')};
+    background-color: ${(props: any) => (props.done ? '#8989bb' : 'none')};
+    &:hover {
+        background-color: #cacae4;
+        border-color: #cacae4;
+    }
 `;
 
 const ItemContent = styled.div`
